@@ -1,10 +1,9 @@
 <?php
 require_once 'core/init.php';
 
-$user = DB::getInstance()->get('users', ['username', '=', 'sean.mee86']);
+$userUpdate = DB::getInstance()->update('users', 7, [
+    'password' => 'newPassword',
+    'username' => 'Dale Earnhardt'
+]);
 
-if(!$user -> count()){
-    echo 'No user';
-}else{
-    echo $user->first()->username;
-}
+
