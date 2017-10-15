@@ -3,37 +3,40 @@
 require_once 'core/init.php';
 
 if(Input::exists()){
-    $validate = new Validate();
-    $validation = $validate->check($_POST, [
-        'username' => [
-            'required' => true,
-            'min' => 2,
-            'max' => 20,
-            'unique' => 'users'
-        ],
-        'password' => [
-            'required' => true,
-            'min' => 6
-        ],
-        'password_again' => [
-            'required' => true,
-            'matches' => 'password'
-        ],
-        'name' => [
-            'required' => true,
-            'min' => 2,
-            'max' => 50
-        ]
-    ]);
 
-    if($validation->passed()){
-        echo 'Passed';
-    }else{
-        foreach($validation->errors() as $error){
-            echo $error . '<br>';
+    if(Token::check(Input::get('token'))) {
+
+        $validate = new Validate();
+        $validation = $validate->check($_POST, [
+            'username' => [
+                'required' => true,
+                'min' => 2,
+                'max' => 20,
+                'unique' => 'users'
+            ],
+            'password' => [
+                'required' => true,
+                'min' => 6
+            ],
+            'password_again' => [
+                'required' => true,
+                'matches' => 'password'
+            ],
+            'name' => [
+                'required' => true,
+                'min' => 2,
+                'max' => 50
+            ]
+        ]);
+
+        if ($validation->passed()) {
+            echo 'Passed';
+        } else {
+            foreach ($validation->errors() as $error) {
+                echo $error . '<br>';
+            }
         }
     }
-
 }
 
 ?>
@@ -60,6 +63,7 @@ if(Input::exists()){
         <input type="text" name="name" value="<?php echo escape(Input::get('name')); ?>" id="name">
     </div>
 
+    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
     <input type="submit" value="Register">
 
 </form>
